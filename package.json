@@ -4,7 +4,7 @@
   "description": "Hackathon project for Datacomp 2019",
   "main": "index.js",
   "scripts": {
-        "dev": "next",
+    "dev": "next",
     "build": "next build",
     "start": "next start"
   },
@@ -22,6 +22,8 @@
   "dependencies": {
     "next": "^9.0.4",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.9.0",
+    "styled-components": "^4.3.2",
+    "uikit-react": "^3.0.20"
   }
 }
