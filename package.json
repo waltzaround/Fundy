@@ -4,7 +4,7 @@
   "description": "Hackathon project for Datacomp 2019",
   "main": "index.js",
   "scripts": {
-        "dev": "next",
+    "dev": "next",
     "build": "next build",
     "start": "next start"
   },
