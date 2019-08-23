@@ -1,0 +1,25 @@
+{
+  "name": "Fundy",
+  "version": "1.0.0",
+  "description": "Hackathon project for Datacomp 2019",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/waltzaround/Fundy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/waltzaround/Fundy/issues"
+  },
+  "homepage": "https://github.com/waltzaround/Fundy#readme",
+  "dependencies": {
+    "next": "^9.0.4",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  }
+}
