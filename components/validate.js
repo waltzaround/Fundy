@@ -4,6 +4,8 @@ import Axios from "axios";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { FormControl } from '@material-ui/core';
+import DeckGL from '@deck.gl/react';
+import {LineLayer} from '@deck.gl/layers';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 class ValidateCharity extends React.Component {
@@ -89,7 +91,6 @@ class ValidateCharity extends React.Component {
     };
 
     render() {
-
         return(
             <React.Fragment>
                 <div style={{backgroundColor: '#FFF', width: '100%', height: '100%', position: 'absolute'}}>
@@ -117,6 +118,7 @@ class ValidateCharity extends React.Component {
                         </React.Fragment>
                     </div>
                 </div>
+
             </React.Fragment>
         );
     };

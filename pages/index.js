@@ -1,9 +1,11 @@
 import ValidateCharity from '../components/validate';
+import Map from '../components/map';
 
 const Index = () => (
-  <div>
+  <React.Fragment>
     <ValidateCharity/>
-  </div>
+    {/*<Map/>*/}
+  </React.Fragment>
 );
 
 export default Index;
