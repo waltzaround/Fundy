@@ -43,6 +43,7 @@ const Index = () => (
     <HeroContainer>
         <HeroContent>
           <HeroH1>Do good.</HeroH1>
+          <button type="button" className="btn btn-primary">Primary</button>
         </HeroContent>
         <HeroImage></HeroImage>
       </HeroContainer>
