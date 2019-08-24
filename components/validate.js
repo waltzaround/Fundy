@@ -8,9 +8,11 @@ class ValidateCharity extends React.Component {
             status: '',
             userInput: '',
             totalExpenditure: '',
-            coordinates: ''
-        }
-
+            coordinates: '',
+            summary: '',
+            accountID: ''
+        };
+        
         this.handleInput = this.handleInput.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
@@ -24,6 +26,8 @@ class ValidateCharity extends React.Component {
             data = JSON.parse(response.request.response);
         });
 
+        let accountID = data.d[0]['AccountId'];
+
         let suburb = data.d[0]['StreetAddress_suburb'];
         let city = data.d[0]['StreetAddress_city'];
         let location = suburb + ',' + city;
@@ -33,7 +37,7 @@ class ValidateCharity extends React.Component {
             financial = response.data.d[length - 1]['TotalExpenditure']; 
         });
 
-        this.setState({status: data.d[0]['RegistrationStatus'], totalExpenditure: financial});
+        this.setState({status: data.d[0]['RegistrationStatus'], totalExpenditure: financial, accountID: accountID});
         this.getCoordinates(location);
     };
 
@@ -49,7 +53,23 @@ class ValidateCharity extends React.Component {
         });
 
         this.setState({coordinates: coordinates});
+        this.getSummary();
     };
+
+    async getSummary() {
+        let url = 'https://www.register.charities.govt.nz/CharitiesRegister/ViewCharity?accountId=' + this.state.accountID;
+        let final = '';
+
+        await Axios.get("https://cors-anywhere.herokuapp.com/" + url).then(function (response) {
+            let firstSplit = (response.request.response.split("Charitable Purpose")[1]);
+            let secondSplit = firstSplit.split("</span>")[0];
+            let thirdSplit = secondSplit.split('class="wordWrap">')[1];
+
+            final = thirdSplit;
+        });
+
+        this.setState({summary: final});
+    }
 
     handleInput = (e) => {
         this.setState({userInput: e.target.value});
@@ -68,6 +88,7 @@ class ValidateCharity extends React.Component {
                 <p>Current Status: {this.state.status}</p>
                 <p>Last Total Expenditure: {this.state.totalExpenditure}</p>
                 <p>Geographical Coordinates: {this.state.coordinates}</p>
+                <p>Summary: {this.state.summary}</p>
             </React.Fragment>
         );
     };
