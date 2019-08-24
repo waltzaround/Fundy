@@ -1,0 +1,227 @@
+
+<div id="map"></div>
+
+
+
+    <style>
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <script>
+        var map;
+        // var henare = { lat: -36.851577, lng: 174.768379 };
+        // var person2 = { lat: -36.858034, lng: 174.777290 };
+        // var person3 = { lat: -36.863434, lng: 174.777795 };
+        // var person4 = { lat: -36.871450, lng: 174.774469 };
+
+    // random charity location by user impact
+
+    var charityImpactmap = {
+        Auckland: {
+          center: {lat: -36.9146254, lng: 174.6536504},
+          expenses: 200,
+          color: '#537d91'
+        },
+        Christchurch: {
+          center: {lat: 40.714, lng: -74.005},
+          expenses: 280,
+          color : '#a32f80'
+        },
+        Wellington: {
+          center: {lat:-43.5243234, lng: 172.4663558},
+          expenses: 350,
+          color : '#010a43'
+        },
+        NorthSomewhere: {
+          center: {lat:-41.286461, lng: 174.776230},
+          expenses: 500,
+          color : '#010a43'
+        },
+        Gisborne: {
+          center: {lat:-37.505550, lng: 144.603530},
+          expenses: 100,
+          color : '#ff6363'
+        }, 
+        Napier: {
+          center: {lat:-39.492844, lng: 176.912018},
+          expenses: 170,
+          color : '#1fab89'
+        }
+        , 
+        Dunedin: {
+          center: {lat:-45.874401, lng: 170.505005},
+          expenses: 110,
+          color : '#f77754'
+        }
+        , 
+        Invercargill: {
+          center: {lat:-46.413185, lng: 168.353775},
+          expenses: 360,
+          color : '#537d91'
+        }
+
+      };
+		// centerized new zeland map on screen
+		var mapCenter = { lat: -36.9146254, lng: 174.6536504   };
+
+
+        function ActionControl(controlDiv, map, innerHtml, extraClass) {
+
+            // Set CSS for the control border.
+            var controlUI = document.createElement('div');
+            controlUI.classList.add('maps-nav-user-btn');
+            controlUI.classList.add(extraClass);
+            controlDiv.appendChild(controlUI);
+
+            // Set CSS for the control interior.
+            var controlText = document.createElement('div');
+            controlText.innerHTML = innerHtml;
+            controlUI.appendChild(controlText);
+
+            // Setup the click event listeners
+            controlUI.addEventListener('click', function () {
+                var animationElements = document.querySelectorAll('.maps-nav-user-text-response');
+
+                if (animationElements) {
+                    animationElements.forEach(function(elem) {
+                        animate(elem, 'fadeInUp');
+                    });
+                }
+            });
+
+        }
+
+        function DistanceControl(controlDiv) {
+            // Set CSS for the control border.
+            var controlUI = document.createElement('div');
+            controlUI.classList.add('maps-nav-user-distance');
+            controlDiv.appendChild(controlUI);
+            controlUI.appendChild(document.createElement('div'));
+            // Set CSS for the control interior.
+            var controlText = document.createElement('div');
+            controlText.innerHTML = '<i class="mdi mdi-chevron-up"></i><span>3.3 kms away</span>';
+            controlUI.appendChild(controlText);
+        }
+
+        function TextResponseControl(controlDiv, innerHtml) {
+            // Set CSS for the control border.
+            var controlUI = document.createElement('div');
+            controlUI.classList.add('maps-nav-user-text-response');
+            controlUI.classList.add('animated');
+            controlUI.setAttribute('hidden', 'hidden');
+            controlDiv.appendChild(controlUI);
+
+            // Set CSS for the control interior.
+            var controlText = document.createElement('div');
+            controlText.innerHTML = innerHtml;
+            controlUI.appendChild(controlText);
+            controlUI.addEventListener('click', function () {
+                window.location.href = '/profileGamification';
+            });
+        }
+
+
+        function initMap() {
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 6,
+          center: {lat: -40.9146254, lng: 176.6536504},
+          //mapTypeId: 'terrain'
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+      styles: [{
+        "featureType": "administrative.neighborhood",
+        "elementType": "labels",
+        "stylers": [{
+          "visibility": "off"
+        }]
+      }, {
+        "featureType": "administrative.land_parcel",
+        "elementType": "labels",
+        "stylers": [{
+          "visibility": "off"
+        }]
+      }, {
+        "featureType": "administrative.locality",
+        "elementType": "labels",
+        "stylers": [{
+          "visibility": "off"
+        }]
+      }, {}]
+        });
+            
+
+            for (var city in charityImpactmap) {
+                var outerCircle = new google.maps.Circle({
+                strokeOpacity: 0.2,
+                fillColor: charityImpactmap[city].color,
+                fillOpacity: 0.95,
+                map: map,
+                center:charityImpactmap[city].center,
+                radius: Math.sqrt(charityImpactmap[city].expenses) * 600
+            });
+
+            var innerCircle = new google.maps.Circle({
+                strokeOpacity: 0.5,
+                fillColor: charityImpactmap[city].color,
+                fillOpacity: 0.35,
+                map: map,
+                center: charityImpactmap[city].center,
+                radius:Math.sqrt(charityImpactmap[city].expenses) * 800
+            });
+            }
+        
+
+            // var henareMarker = new google.maps.Marker({
+            //     position: henare,
+            //     map: map,
+            //     title: 'Henare Turipa',
+            //     icon: {
+            //         url: 'https://docwalkerwebblob.blob.core.windows.net/avatar/positive-avatar.png', // url
+            //         scaledSize: new google.maps.Size(30, 82) // scaled size
+            //     }
+            // });
+
+            // var person2Marker = new google.maps.Marker({
+            //     position: person2,
+            //     map: map,
+            //     title: 'Person2',
+            //     icon: {
+            //         url: 'https://docwalkerwebblob.blob.core.windows.net/avatar/sadness-avatar.png', // url
+            //         scaledSize: new google.maps.Size(150, 150) // scaled size
+            //     }
+            // });
+
+            // var person3Marker = new google.maps.Marker({
+            //     position: person3,
+            //     map: map,
+            //     title: 'Person3',
+            //     icon: {
+            //         url: 'https://docwalkerwebblob.blob.core.windows.net/avatar/cheeky-avatar.png', // url
+            //         scaledSize: new google.maps.Size(30, 82) // scaled size
+            //     }
+            // });
+
+            // var person4Marker = new google.maps.Marker({
+            //     position: person4,
+            //     map: map,
+            //     title: 'Person4',
+            //     icon: {
+            //         url: 'https://docwalkerwebblob.blob.core.windows.net/avatar/joy-avatar.png', // url
+            //         scaledSize: new google.maps.Size(30, 82) // scaled size
+            //     }
+            
+        
+            
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0rmhQH42v3OIw5VnbPjbhtpUzNe1RUMw&callback=initMap">
+    </script>
+}
+
