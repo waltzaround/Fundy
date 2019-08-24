@@ -1,4 +1,10 @@
+
+import React from 'react';
 import Axios from "axios";
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import { FormControl } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class ValidateCharity extends React.Component {
     constructor(props) {
@@ -10,7 +16,9 @@ class ValidateCharity extends React.Component {
             totalExpenditure: '',
             coordinates: '',
             summary: '',
-            accountID: ''
+            accountID: '',
+            display: true,
+            loading: false
         };
         
         this.handleInput = this.handleInput.bind(this);
@@ -18,6 +26,7 @@ class ValidateCharity extends React.Component {
     }
 
     async getStatus(registerationNumber) {
+        this.setState({loading: true});
         let url = "https://cors-anywhere.herokuapp.com/http://www.odata.charities.govt.nz/Organisations?$filter=CharityRegistrationNumber eq '" + registerationNumber + "'&$format=json";
         let data = [];
         let financial = [];
@@ -68,7 +77,7 @@ class ValidateCharity extends React.Component {
             final = thirdSplit;
         });
 
-        this.setState({summary: final});
+        this.setState({summary: final, display: false, loading: false});
     }
 
     handleInput = (e) => {
@@ -80,18 +89,38 @@ class ValidateCharity extends React.Component {
     };
 
     render() {
+
         return(
             <React.Fragment>
-                Charity ID:<input type="text" onChange={this.handleInput}></input>
-                <input type="submit" onClick={this.handleClick}></input>
+                <div style={{backgroundColor: '#FFF', width: '100%', height: '100%', position: 'absolute'}}>
+                    <div style={{position: 'absolute', left: '45%', top: '25%', width: 'auto'}}>
+                            <React.Fragment>
+                                <FormControl>
+                                <TextField label="Charity ID" variant="outlined" value={this.state.userInput} onChange={this.handleInput}/>
+                                <Button onClick={this.handleClick} variant="outlined" style={{marginTop: '2%'}}>
+                                    Search
+                                </Button>
+                            </FormControl>
+                            <br/>
 
-                <p>Current Status: {this.state.status}</p>
-                <p>Last Total Expenditure: {this.state.totalExpenditure}</p>
-                <p>Geographical Coordinates: {this.state.coordinates}</p>
-                <p>Summary: {this.state.summary}</p>
+                        {this.state.loading ? <div style={{position: 'absolute', left: '42.5%', top: '115%', width: 'auto'}}><CircularProgress /></div> :
+                            <React.Fragment>
+                                {this.state.display ? '' :
+                                    <div style={{position: 'fixed', marginTop: '3%', marginLeft: '-10%'}}>
+                                    <TextField label="Status" value={this.state.status} style={{width: '33%', marginRight: '3%'}}></TextField>
+                                    <TextField label="Total Expenditure" value={'$' + this.state.totalExpenditure} style={{width: '27%'}}></TextField>
+                                    <TextField label="Geographical Coordinates" value={this.state.coordinates} style={{width: '33%', marginLeft: '3%'}}></TextField>
+                                    <br/>
+                                    <TextField multiline={true} rows="4" label="Summary" value={this.state.summary} style={{width: '100%', marginTop: '2%'}}></TextField>
+                                </div>}
+                            </React.Fragment>}
+                        </React.Fragment>
+                    </div>
+                </div>
             </React.Fragment>
         );
     };
+    
 };
 
 export default ValidateCharity;
