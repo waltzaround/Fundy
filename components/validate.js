@@ -22,8 +22,11 @@ class ValidateCharity extends React.Component {
             data = JSON.parse(response.request.response);
         });
 
+        console.log(data);
+
         await Axios.get("https://cors-anywhere.herokuapp.com/" + data.d[0]['AnnualReturn']['__deferred']['uri']).then(function (response) {
-            financial = response.data.d[0]['TotalExpenditure']; 
+        let length = response.data.d.length;
+        financial = response.data.d[length - 1]['TotalExpenditure']; 
         });
 
         this.setState({status: data.d[0]['RegistrationStatus'], totalExpenditure: financial});
@@ -44,8 +47,8 @@ class ValidateCharity extends React.Component {
                 <input type="text" onChange={this.handleInput}></input>
                 <input type="submit" onClick={this.handleClick}></input>
 
-                <p>Status: {this.state.status}</p>
-                <p>Total Expenditure: {this.state.totalExpenditure}</p>
+                <p>Current Status: {this.state.status}</p>
+                <p>Last Total Expenditure: {this.state.totalExpenditure}</p>
             </React.Fragment>
         );
     };
