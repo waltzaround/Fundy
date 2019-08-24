@@ -1,17 +1,54 @@
 import Axios from "axios";
 
-const ValidateCharity = (registerationNumber) => {
-    registerationNumber = 'CC49286'
-    let url = "https://cors-anywhere.herokuapp.com/http://www.odata.charities.govt.nz/Organisations?$filter=CharityRegistrationNumber eq '" + registerationNumber + "'&$format=json";
-    
-    let status = '';
+class ValidateCharity extends React.Component {
+    constructor(props) {
+        super(props);
 
-    Axios.get(url).then(function (response) {
-        let data = JSON.parse(response.request.response);
-        status = (data.d[0]['RegistrationStatus']);
-    })
+        this.state = {
+            status: 'Null',
+            userInput: ''
+        }
 
-    return status;
+        this.handleInput = this.handleInput.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    async getStatus(registerationNumber) {
+        let url = "https://cors-anywhere.herokuapp.com/http://www.odata.charities.govt.nz/Organisations?$filter=CharityRegistrationNumber eq '" + registerationNumber + "'&$format=json";
+        let data = [];
+        let financial = [];
+
+        await Axios.get(url).then(function (response) {
+            data = JSON.parse(response.request.response);
+        });
+
+        await Axios.get("https://cors-anywhere.herokuapp.com/" + data.d[0]['AnnualReturn']['__deferred']['uri']).then(function (response) {
+            financial = response.data.d[0]['TotalExpenditure']; 
+        });
+
+        this.setState({status: data.d[0]['RegistrationStatus'], totalExpenditure: financial});
+    }
+
+    handleInput = (e) => {
+        this.setState({userInput: e.target.value});
+    }
+
+    handleClick() {
+        console.log(this.state.userinput);
+        this.getStatus(this.state.userInput);
+    }
+
+    render() {
+        return(
+            <React.Fragment>
+                <input type="text" onChange={this.handleInput}></input>
+                <input type="submit" onClick={this.handleClick}></input>
+
+                <p>Status: {this.state.status}</p>
+                <p>Total Expenditure: {this.state.totalExpenditure}</p>
+            </React.Fragment>
+        );
+    };
 };
 
 export default ValidateCharity;
