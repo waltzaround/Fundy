@@ -11,7 +11,7 @@ const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1Ijoic2Frc2hhbWFuYW5kIiwiYSI6ImNqenA1cmltczA5
 const initialViewState = {
   longitude: 174.763336,
   latitude: -36.848461,
-  zoom: 13,
+  zoom: 3,
   pitch: 0,
   bearing: 0
 };

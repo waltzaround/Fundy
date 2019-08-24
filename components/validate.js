@@ -7,6 +7,7 @@ import { FormControl } from '@material-ui/core';
 import DeckGL from '@deck.gl/react';
 import {LineLayer} from '@deck.gl/layers';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { generateCSV } from './csv';
 
 class ValidateCharity extends React.Component {
     constructor(props) {
@@ -25,6 +26,7 @@ class ValidateCharity extends React.Component {
         
         this.handleInput = this.handleInput.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        generateCSV();
     }
 
     async getStatus(registerationNumber) {
@@ -36,6 +38,11 @@ class ValidateCharity extends React.Component {
         await Axios.get(url).then(function (response) {
             data = JSON.parse(response.request.response);
         });
+
+        if (data.d[0]['RegistrationStatus'] === 'Deregistered') {
+            this.setState({loading: false});
+            return;
+        }
 
         let accountID = data.d[0]['AccountId'];
 
@@ -50,6 +57,7 @@ class ValidateCharity extends React.Component {
 
         this.setState({status: data.d[0]['RegistrationStatus'], totalExpenditure: financial, accountID: accountID});
         this.getCoordinates(location);
+        return (this.getCoordinates(location), financial);
     };
 
     async getCoordinates(location) {
@@ -89,6 +97,7 @@ class ValidateCharity extends React.Component {
     handleClick() {
         this.getStatus(this.state.userInput);
     };
+
 
     render() {
         return(
